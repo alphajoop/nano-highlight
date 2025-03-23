@@ -1,0 +1,18 @@
+pnpm lint
+
+# Check TypeScript types
+pnpm tsc --noEmit
+
+# Check branch name format
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+BRANCH_PATTERN="^(feat|feature|fix|docs|style|refactor|perf|test|chore|revert)/[a-z0-9-]+$"
+
+if ! echo "$BRANCH_NAME" | grep -E "$BRANCH_PATTERN" > /dev/null; then
+  echo "❌ Invalid branch name: $BRANCH_NAME"
+  echo "The format must be: <type>/<description>"
+  echo "Valid types: feat, feature, fix, docs, style, refactor, perf, test, chore, revert"
+  echo "Example: feat/auth-validation"
+  exit 1
+fi
+
+echo "✅ Valid branch name: $BRANCH_NAME"
