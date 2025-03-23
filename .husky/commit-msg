@@ -1,0 +1,10 @@
+message="$(cat $1)"
+types="feat|fix|docs|style|refactor|perf|test|chore|revert"
+
+if ! echo "$message" | grep -qE "^($types)(\(.+\))?: .+"; then
+  echo "❌ Invalid commit message."
+  echo "The format must be: <type>(<scope>): <description>"
+  echo "Valid types: feat, fix, docs, style, refactor, perf, test, chore, revert"
+  echo "Example: feat(auth): add form validation for login"
+  exit 1
+fi
