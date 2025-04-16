@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nano-Highlight Demo</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/firacode/6.2.0/fira_code.css"
+    />
+    <style>
+      :root {
+        --font-sans:
+          'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+          'Open Sans', 'Helvetica Neue', sans-serif;
+        --color-primary: #4361ee;
+        --color-primary-hover: #3a56d4;
+        --color-text: #2b2d42;
+        --color-text-light: #6c757d;
+        --color-background: #f8f9fa;
+        --color-card: #ffffff;
+        --color-border: #e9ecef;
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --space-1: 8px;
+        --space-2: 16px;
+        --space-3: 24px;
+        --space-4: 32px;
+        --space-5: 64px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --color-primary: #4361ee;
+          --color-primary-hover: #5a72f3;
+          --color-text: #e9ecef;
+          --color-text-light: #adb5bd;
+          --color-background: #1a1b26;
+          --color-card: #252a41;
+          --color-border: #2d3250;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--color-background);
+        color: var(--color-text);
+        line-height: 1.6;
+        padding: var(--space-2);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: var(--space-3) 0;
+      }
+
+      header {
+        margin-bottom: var(--space-5);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 800;
+        background: linear-gradient(45deg, var(--color-primary), #4cc9f0);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: var(--space-1);
+      }
+
+      .tagline {
+        color: var(--color-text-light);
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .demo-section {
+        margin-bottom: var(--space-5);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--shadow-md);
+        background-color: var(--color-card);
+        border: 1px solid var(--color-border);
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-2);
+        padding: var(--space-3);
+        background-color: rgba(67, 97, 238, 0.05);
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      select,
+      button {
+        padding: 12px 16px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--color-border);
+        background-color: var(--color-card);
+        font-size: 15px;
+        font-family: var(--font-sans);
+        color: var(--color-text);
+        flex-grow: 1;
+      }
+
+      @media (min-width: 768px) {
+        select,
+        button {
+          flex-grow: 0;
+        }
+      }
+
+      button {
+        cursor: pointer;
+        background-color: var(--color-primary);
+        color: white;
+        border-color: transparent;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        min-width: 120px;
+      }
+
+      button:hover {
+        background-color: var(--color-primary-hover);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .editor-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1px;
+        background-color: var(--color-border);
+        height: auto;
+        min-height: 600px;
+      }
+
+      @media (min-width: 768px) {
+        .editor-container {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      textarea {
+        padding: var(--space-3);
+        font-family: 'Fira Code', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        border: none;
+        resize: none;
+        background-color: var(--color-card);
+        color: var(--color-text);
+        outline: none;
+        height: 300px;
+      }
+
+      @media (min-width: 768px) {
+        textarea {
+          height: 100%;
+        }
+      }
+
+      .output {
+        padding: 0;
+        overflow: auto;
+        background-color: var(--color-card);
+        height: auto;
+        min-height: 300px;
+      }
+
+      @media (min-width: 768px) {
+        .output {
+          height: auto;
+          min-height: 100%;
+        }
+      }
+
+      .nano-highlight {
+        margin: 0;
+        padding: var(--space-3);
+        font-family: 'Fira Code', monospace;
+        font-size: 14px;
+        line-height: 1.6;
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        box-sizing: border-box;
+        border-radius: 0;
+      }
+
+      .performance {
+        padding: 12px var(--space-3);
+        font-size: 14px;
+        color: var(--color-text-light);
+        text-align: right;
+        background-color: rgba(67, 97, 238, 0.05);
+        border-top: 1px solid var(--color-border);
+      }
+
+      .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--space-3);
+        margin-top: var(--space-4);
+      }
+
+      .feature-card {
+        padding: var(--space-3);
+        background-color: var(--color-card);
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--color-border);
+        box-shadow: var(--shadow-sm);
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .feature-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .feature-card h3 {
+        margin-top: 0;
+        margin-bottom: var(--space-1);
+        color: var(--color-primary);
+        font-size: 1.25rem;
+      }
+
+      .feature-icon {
+        font-size: 2rem;
+        margin-bottom: var(--space-2);
+        color: var(--color-primary);
+      }
+
+      /* Dark mode code input improvements */
+      @media (prefers-color-scheme: dark) {
+        textarea {
+          background-color: #1e1e2e;
+        }
+
+        .output {
+          background-color: #1e1e2e;
+        }
+      }
+
+      footer {
+        text-align: center;
+        margin-top: var(--space-5);
+        padding: var(--space-3);
+        color: var(--color-text-light);
+        font-size: 0.9rem;
+        border-top: 1px solid var(--color-border);
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Nano-Highlight</h1>
+        <p class="tagline">Ultra-lightweight syntax highlighting library for the modern web</p>
+      </header>
+
+      <div class="demo-section">
+        <div class="controls">
+          <select id="language-select">
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="python">Python</option>
+          </select>
+
+          <select id="theme-select">
+            <option value="dark">Dark Theme</option>
+            <option value="light">Light Theme</option>
+          </select>
+
+          <button id="highlight-btn"><i class="fas fa-magic"></i> Highlight</button>
+        </div>
+
+        <div class="editor-container">
+          <textarea id="code-input" placeholder="Enter your code here..."></textarea>
+          <div class="output" id="output-container"></div>
+        </div>
+
+        <div class="performance" id="performance-info"></div>
+      </div>
+
+      <div class="feature-list">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-feather"></i></div>
+          <h3>Lightweight</h3>
+          <p>
+            Nano-Highlight is just ~5KB minified and gzipped, making it one of the smallest syntax
+            highlighters available.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+          <h3>Blazing Fast</h3>
+          <p>
+            Optimized tokenization engine that can process thousands of lines of code in
+            milliseconds.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+          <h3>Modern</h3>
+          <p>Built with ESM modules, supports tree-shaking, and has zero dependencies.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-puzzle-piece"></i></div>
+          <h3>Extensible</h3>
+          <p>Easy to add custom languages and themes with a simple API.</p>
+        </div>
+      </div>
+
+      <footer>
+        <p>&copy; 2025 Nano-Highlight. All rights reserved.</p>
+      </footer>
+    </div>
+
+    <script type="module">
+      import nanoHighlight from '../dist/nano-highlight.esm.js';
+
+      // Sample code snippets for each language
+      const sampleCode = {
+        javascript: `// Sample JavaScript code
+function factorial(n) {
+  if (n <= 1) return 1;
+  return n * factorial(n - 1);
+}
+
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map(n => n * 2);
+
+console.log("Factorial of 5 is " + factorial(5));
+console.log("Doubled numbers: " + doubled);`,
+
+        typescript: `// Sample TypeScript code
+interface Person {
+  name: string;
+  age: number;
+  email?: string;
+}
+
+class Employee implements Person {
+  constructor(
+    public name: string,
+    public age: number,
+    private salary: number
+  ) {}
+  
+  getSalary(): number {
+    return this.salary;
+  }
+}
+
+const john: Person = new Employee("John Doe", 30, 50000);
+console.log(john.name);`,
+
+        html: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample HTML</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1 class="title">Hello World</h1>
+  </header>
+  <main>
+    <p>This is a sample HTML document.</p>
+    <button id="btn">Click me!</button>
+  </main>
+  <!-- This is a comment -->
+  <script src="app.js"><\/script>
+</body>
+</html>`,
+
+        css: `/* Sample CSS */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  color: #4078f2;
+  border-bottom: 2px solid #eee;
+}
+
+button {
+  background-color: #4078f2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #2d5ed9;
+}`,
+
+        python: `# Sample Python code
+def fibonacci(n):
+    """Generate fibonacci sequence up to n"""
+    a, b = 0, 1
+    result = []
+    while a < n:
+        result.append(a)
+        a, b = b, a + b
+    return result
+
+class Calculator:
+    def __init__(self, value=0):
+        self.value = value
+    
+    def add(self, x):
+        self.value += x
+        return self
+        
+print(f"Fibonacci sequence: {fibonacci(100)}")
+calc = Calculator(10)
+result = calc.add(5).add(10).value
+print(f"Calculator result: {result}")`,
+
+        ruby: `# Sample Ruby code
+class Person
+  attr_accessor :name, :age
+  
+  def initialize(name, age)
+    @name = name
+    @age = age
+  end
+  
+  def greeting
+    "Hello, my name is #{@name} and I'm #{@age} years old."
+  end
+end
+
+# Create a new person
+john = Person.new("John", 30)
+puts john.greeting
+
+# Array operations
+numbers = [1, 2, 3, 4, 5]
+doubled = numbers.map { |n| n * 2 }
+puts "Doubled numbers: #{doubled.join(', ')}"`,
+      };
+
+      // DOM elements
+      const languageSelect = document.getElementById('language-select');
+      const themeSelect = document.getElementById('theme-select');
+      const codeInput = document.getElementById('code-input');
+      const highlightBtn = document.getElementById('highlight-btn');
+      const outputContainer = document.getElementById('output-container');
+      const performanceInfo = document.getElementById('performance-info');
+
+      // Set initial code sample
+      codeInput.value = sampleCode[languageSelect.value];
+
+      // Update code sample when language changes
+      languageSelect.addEventListener('change', function () {
+        codeInput.value = sampleCode[languageSelect.value];
+        highlightCode();
+      });
+
+      // Update highlighting when theme changes
+      themeSelect.addEventListener('change', highlightCode);
+
+      // Highlight code
+      function highlightCode() {
+        const code = codeInput.value;
+        const language = languageSelect.value;
+        const theme = themeSelect.value;
+
+        // Measure performance
+        const startTime = performance.now();
+
+        // Highlight the code
+        const result = nanoHighlight.highlight(code, language, theme);
+
+        // Calculate performance
+        const endTime = performance.now();
+        const duration = endTime - startTime;
+
+        // Update the output
+        outputContainer.innerHTML = result.html;
+
+        // Add theme CSS
+        let styleTag = document.getElementById('nano-highlight-theme');
+        if (!styleTag) {
+          styleTag = document.createElement('style');
+          styleTag.id = 'nano-highlight-theme';
+          document.head.appendChild(styleTag);
+        }
+        styleTag.textContent = result.css;
+
+        // Show performance info
+        performanceInfo.textContent = `Highlighting took ${duration.toFixed(
+          2
+        )}ms for ${code.length} characters (${((code.length / duration) * 1000).toFixed(
+          2
+        )} chars/s)`;
+      }
+
+      // Auto-resize textarea
+      function adjustTextareaHeight() {
+        if (window.innerWidth < 768) {
+          // Don't auto-adjust on mobile
+          return;
+        }
+      }
+
+      // Watch for window resize
+      window.addEventListener('resize', adjustTextareaHeight);
+
+      // Initial resize
+      adjustTextareaHeight();
+
+      // Attach event listeners
+      highlightBtn.addEventListener('click', highlightCode);
+      codeInput.addEventListener('input', function () {
+        // Auto highlight as user types (with debounce)
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(highlightCode, 300);
+      });
+
+      // Initial highlight
+      highlightCode();
+    </script>
+  </body>
+</html>

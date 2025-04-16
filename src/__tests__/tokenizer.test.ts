@@ -1,5 +1,6 @@
 import { tokenize } from '../core/tokenizer';
 import javascript from '../languages/javascript';
+import python from '../languages/python';
 
 describe('Tokenizer', () => {
   test('correctly tokenizes JavaScript comment', () => {
@@ -46,5 +47,61 @@ describe('Tokenizer', () => {
     expect(stringTokens[0].content).toBe('"Hello, world!"');
     expect(stringTokens[1].content).toBe("'Another string'");
     expect(stringTokens[2].content).toBe('`Template string`');
+  });
+
+  test('correctly tokenizes Python comment', () => {
+    const code = '# This is a comment';
+    const tokens = tokenize(code, python);
+
+    expect(tokens).toHaveLength(1);
+    expect(tokens[0]).toEqual({
+      type: 'comment',
+      content: '# This is a comment',
+      start: 0,
+      end: 19,
+    });
+  });
+
+  test('correctly tokenizes Python variables and keywords', () => {
+    const code = 'def my_function():';
+    const tokens = tokenize(code, python);
+
+    expect(tokens).toHaveLength(6);
+    expect(tokens[0]).toEqual({
+      type: 'keyword',
+      content: 'def',
+      start: 0,
+      end: 3,
+    });
+    expect(tokens[1]).toEqual({
+      type: 'text',
+      content: ' ',
+      start: 3,
+      end: 4,
+    });
+    expect(tokens[2]).toEqual({
+      type: 'function',
+      content: 'my_function',
+      start: 4,
+      end: 15,
+    });
+    expect(tokens[3]).toEqual({
+      type: 'operator',
+      content: '(',
+      start: 15,
+      end: 16,
+    });
+    expect(tokens[4]).toEqual({
+      type: 'operator',
+      content: ')',
+      start: 16,
+      end: 17,
+    });
+    expect(tokens[5]).toEqual({
+      type: 'operator',
+      content: ':',
+      start: 17,
+      end: 18,
+    });
   });
 });
