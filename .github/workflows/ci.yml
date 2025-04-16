@@ -13,9 +13,9 @@ jobs:
       matrix:
         node-version: [16.x, 18.x, 20.x]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4.4.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -41,9 +41,9 @@ jobs:
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4.4.0
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
@@ -70,9 +70,9 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.2.2
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4.4.0
         with:
           node-version: '18.x'
       - name: Setup pnpm
