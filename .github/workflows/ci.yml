@@ -14,16 +14,15 @@ jobs:
         node-version: [16.x, 18.x, 20.x]
     steps:
       - uses: actions/checkout@v4.2.2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4.4.0
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Lint
@@ -43,16 +42,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Use Node.js
         uses: actions/setup-node@v4.4.0
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-          run_install: false
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build
@@ -73,15 +71,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.2.2
-      - name: Use Node.js
-        uses: actions/setup-node@v4.4.0
-        with:
-          node-version: '18.x'
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-          run_install: false
+      - name: Use Node.js
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '18.x'
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Build
