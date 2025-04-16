@@ -116,4 +116,42 @@ To add a new theme:
 - Run tests before submitting a pull request: `pnpm test`
 - Ensure test coverage remains high
 
+## CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+### Automated Workflows
+
+1. **CI Pipeline** - Runs on every push and pull request:
+
+   - Linting: Ensures code follows style guidelines
+   - Testing: Runs all tests to verify functionality
+   - Building: Compiles the project to verify it builds correctly
+
+2. **Release Pipeline** - Runs when a new version tag is pushed:
+   - Creates a GitHub Release with changelog
+   - Publishes the package to npm
+   - Deploys the demo to GitHub Pages
+
+### How It Works
+
+- All pull requests must pass the CI pipeline before they can be merged
+- The main branch is protected and requires CI checks to pass
+- When a new version is ready, tag the commit with `v*.*.*` (following semantic versioning) to trigger a release
+
+### Local Verification
+
+Before submitting a PR, you can run the same checks locally:
+
+```bash
+# Run linting
+pnpm run lint
+
+# Run tests
+pnpm test
+
+# Build the project
+pnpm run build
+```
+
 Thank you for contributing to nano-highlight!
