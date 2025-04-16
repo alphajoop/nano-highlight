@@ -5,17 +5,21 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3.8.1
+        uses: actions/setup-node@v3
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
@@ -33,12 +37,10 @@ jobs:
 
       - name: Generate changelog
         id: changelog
-        uses: metcalfc/changelog-generator@v4.1.0
-        with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+        uses: metcalfc/changelog-generator@v4.6.2
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1.1.0
+        uses: softprops/action-gh-release@v1
         with:
           body: ${{ steps.changelog.outputs.changelog }}
           files: |
