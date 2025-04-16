@@ -1,5 +1,5 @@
-import { configs } from '@typescript-eslint/eslint-plugin';
 import typescriptPlugin from '@typescript-eslint/eslint-plugin';
+const { configs } = typescriptPlugin;
 import typescriptParser from '@typescript-eslint/parser';
 
 export default [
