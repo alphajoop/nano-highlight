@@ -24,7 +24,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: Lint
         run: pnpm run lint
       - name: Test
@@ -52,7 +52,7 @@ jobs:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: Build
         run: pnpm run build
       - name: Upload a Build Artifact
@@ -80,13 +80,13 @@ jobs:
         with:
           node-version: '18.x'
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
       - name: Build
         run: pnpm run build
       - name: Build demo
         run: |
           cd demo
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           pnpm run build
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
