@@ -7,6 +7,10 @@
   "types": "dist/index.d.ts",
   "unpkg": "dist/nano-highlight.min.js",
   "type": "module",
+  "publishConfig": {
+    "access": "public",
+    "git-checks": false
+  },
   "scripts": {
     "dev": "rollup -c rollup.config.mjs -w",
     "build": "rollup -c rollup.config.mjs",

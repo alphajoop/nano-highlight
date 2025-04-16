@@ -41,14 +41,18 @@ jobs:
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare release package
+        run: |
+          mkdir -p release-package
+          cp dist/*.js dist/*.js.map release-package/
+          cp LICENSE README.md release-package/
+          find dist -name "*.d.ts" -not -path "*/node_modules/*" -exec cp --parents {} release-package/ \;
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           body: ${{ steps.changelog.outputs.changelog }}
-          files: |
-            dist/**
-            LICENSE
-            README.md
+          files: release-package/**/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
